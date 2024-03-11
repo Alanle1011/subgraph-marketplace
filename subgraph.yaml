@@ -5,28 +5,37 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: NftMarketplace
+    name: Contract
     network: sepolia
     source:
-      address: "0xC48BE47e4edcC44A78227FdE98c1e7CDe579d7C1"
-      abi: NftMarketplace
-      startBlock: 5132027
+      address: "0x78a10Ad00434Ce44e0ACAC9293A258EEdDdcAA51"
+      abi: Contract
+      startBlock: 5442098
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
+        - BidItemBought
+        - BidItemListed
         - ItemBought
         - ItemCanceled
         - ItemListed
+        - RaiseBidPrice
       abis:
-        - name: NftMarketplace
-          file: ./abis/NftMarketplace.json
+        - name: Contract
+          file: ./abis/Contract.json
       eventHandlers:
+        - event: BidItemBought(indexed address,indexed address,uint256,uint256)
+          handler: handleBidItemBought
+        - event: BidItemListed(indexed address,indexed address,indexed uint256,uint256)
+          handler: handleBidItemListed
         - event: ItemBought(indexed address,indexed address,indexed uint256,uint256)
           handler: handleItemBought
         - event: ItemCanceled(indexed address,indexed address,uint256)
           handler: handleItemCanceled
         - event: ItemListed(indexed address,indexed address,indexed uint256,uint256)
           handler: handleItemListed
-      file: ./src/nft-marketplace.ts
+        - event: RaiseBidPrice(indexed address,indexed address,indexed uint256,uint256,uint256)
+          handler: handleRaiseBidPrice
+      file: ./src/contract.ts
