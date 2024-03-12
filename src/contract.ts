@@ -18,22 +18,21 @@ import {
 } from "../generated/schema"
 
 export function handleItemListed(event: ItemListedEvent): void {
-  let itemListed = ItemListed.load(
-    getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
-  )
+  
   let activeItem = ActiveItem.load(
     getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
   )
-  if (!itemListed) {
-    itemListed = new ItemListed(
-      getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
-    )
-  }
+  
   if (!activeItem) {
     activeItem = new ActiveItem(
       getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
     )
   }
+
+  let itemListed = new ItemListed(
+    getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
+  )
+
   itemListed.seller = event.params.seller
   activeItem.seller = event.params.seller
 
@@ -62,22 +61,20 @@ export function handleItemListed(event: ItemListedEvent): void {
 }
 
 export function handleBidItemListed(event: BidItemListedEvent): void {
-  let bidItemListed = BidItemListed.load(
-    getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
-  )
+ 
   let activeItem = ActiveItem.load(
     getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
   )
-  if (!bidItemListed) {
-    bidItemListed = new BidItemListed(
-      getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
-    )
-  }
+   
   if (!activeItem) {
     activeItem = new ActiveItem(
       getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
     )
   }
+
+  let bidItemListed = new BidItemListed(
+    getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
+  )
 
   bidItemListed.seller = event.params.seller
   activeItem.seller = event.params.seller
@@ -108,17 +105,15 @@ export function handleBidItemListed(event: BidItemListedEvent): void {
 }
 
 export function handleItemBought(event: ItemBoughtEvent): void {
-  let itemBought = ItemBought.load(
-    getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
-  )
+  
   let activeItem = ActiveItem.load(
     getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
   )
-  if (!itemBought) {
-    itemBought = new ItemBought(
-      getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
-    )
-  }
+  
+  let  itemBought = new ItemBought(
+      getIdFromEventParams(event.block.timestamp, event.params.nftAddress)
+  )
+  
   itemBought.buyer = event.params.buyer
   itemBought.nftAddress = event.params.nftAddress
   itemBought.tokenId = event.params.tokenId
@@ -134,17 +129,15 @@ export function handleItemBought(event: ItemBoughtEvent): void {
 }
 
 export function handleBidItemBought(event: BidItemBoughtEvent): void {
-  let bidItemBought = new BidItemBought(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
+  
   let activeItem = ActiveItem.load(
     getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
   )
-  if (!bidItemBought) {
-    bidItemBought = new BidItemBought(
-      getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
-    )
-  }
+  
+  let bidItemBought = new BidItemBought(
+    getIdFromEventParams(event.block.timestamp, event.params.nftAddress)
+  )
+  
   bidItemBought.buyyer = event.params.buyyer
   bidItemBought.nftAddress = event.params.nftAddress
   bidItemBought.tokenId = event.params.tokenId
@@ -161,17 +154,15 @@ export function handleBidItemBought(event: BidItemBoughtEvent): void {
 }
 
 export function handleItemCanceled(event: ItemCanceledEvent): void {
-  let itemCanceled = ItemCanceled.load(
-    getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
-  )
+  
   let activeItem = ActiveItem.load(
     getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
   )
-  if (!itemCanceled) {
-    itemCanceled = new ItemCanceled(
-      getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
-    )
-  }
+ 
+  let itemCanceled = new ItemCanceled(
+    getIdFromEventParams(event.block.timestamp, event.params.nftAddress)
+  )
+  
   itemCanceled.seller = event.params.seller
   itemCanceled.nftAddress = event.params.nftAddress
   itemCanceled.tokenId = event.params.tokenId
@@ -186,13 +177,13 @@ export function handleItemCanceled(event: ItemCanceledEvent): void {
 }
 
 export function handleRaiseBidPrice(event: RaiseBidPriceEvent): void {
-  //GET NEW ENTITY EVERY
-  let raiseBidPrice = new RaiseBidPrice(
-    getIdFromEventParams(event.block.timestamp, event.params.nftAddress)
-  )
-
   let activeItem = ActiveItem.load(
     getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
+  )
+
+  //GET NEW ENTITY EVERY TIME
+  let raiseBidPrice = new RaiseBidPrice(
+    getIdFromEventParams(event.block.timestamp, event.params.nftAddress)
   )
   
   raiseBidPrice.buyer = event.params.buyer
@@ -215,6 +206,6 @@ export function handleRaiseBidPrice(event: RaiseBidPriceEvent): void {
   activeItem!.save()
 }
 
-function getIdFromEventParams(tokenId: BigInt, nftAddress: Address): Bytes {
-  return Bytes.fromUTF8(nftAddress.toHexString() + "_" + tokenId.toHexString())
+function getIdFromEventParams(id: BigInt, nftAddress: Address): Bytes {
+  return Bytes.fromUTF8(nftAddress.toHexString() + "_" + id.toHexString())
 }
