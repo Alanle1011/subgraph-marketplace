@@ -5,12 +5,12 @@ schema:
   file: schema.graphql
 dataSources:
   - kind: ethereum
-    name: Contract
-    network: sepolia
+    name: nftmarketplace
+    network: arbitrum-sepolia
     source:
-      address: "0x78a10Ad00434Ce44e0ACAC9293A258EEdDdcAA51"
-      abi: Contract
-      startBlock: 5442098
+      address: "0xCf6eD3Ac93aFE951ddADec505C74f9bcA62C2912"
+      abi: nftmarketplace
+      startBlock: 31190757
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -23,8 +23,8 @@ dataSources:
         - ItemListed
         - RaiseBidPrice
       abis:
-        - name: Contract
-          file: Contract\abis\Contract.json
+        - name: nftmarketplace
+          file: nftmarketplace\abis\nftmarketplace.json
       eventHandlers:
         - event: BidItemBought(indexed address,indexed address,uint256,uint256)
           handler: handleBidItemBought
@@ -36,6 +36,7 @@ dataSources:
           handler: handleItemCanceled
         - event: ItemListed(indexed address,indexed address,indexed uint256,uint256)
           handler: handleItemListed
-        - event: RaiseBidPrice(indexed address,indexed address,indexed uint256,uint256,uint256)
+        - event: RaiseBidPrice(indexed address,indexed address,indexed
+            uint256,uint256,uint256,uint256)
           handler: handleRaiseBidPrice
-      file: Contract\Contract.wasm
+      file: nftmarketplace\nftmarketplace.wasm

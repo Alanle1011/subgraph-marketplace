@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes, bigInt } from "@graphprotocol/graph-ts"
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts"
 import {
   BidItemBought as BidItemBoughtEvent,
   BidItemListed as BidItemListedEvent,
@@ -6,19 +6,18 @@ import {
   ItemCanceled as ItemCanceledEvent,
   ItemListed as ItemListedEvent,
   RaiseBidPrice as RaiseBidPriceEvent
-} from "../generated/Contract/Contract"
+} from "../generated/nftmarketplace/nftmarketplace"
 import {
-  BidItemBought,
+  ActiveItem,
   BidItemListed,
-  ItemBought,
-  ItemCanceled,
   ItemListed,
-  RaiseBidPrice,
-  ActiveItem
+  ItemBought,
+  BidItemBought,
+  ItemCanceled,
+  RaiseBidPrice
 } from "../generated/schema"
 
 export function handleItemListed(event: ItemListedEvent): void {
-  
   let activeItem = ActiveItem.load(
     getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
   )
@@ -30,7 +29,7 @@ export function handleItemListed(event: ItemListedEvent): void {
   }
 
   let itemListed = new ItemListed(
-    getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
+    getIdFromEventParams(event.block.timestamp, event.params.nftAddress)
   )
 
   itemListed.seller = event.params.seller
@@ -61,7 +60,6 @@ export function handleItemListed(event: ItemListedEvent): void {
 }
 
 export function handleBidItemListed(event: BidItemListedEvent): void {
- 
   let activeItem = ActiveItem.load(
     getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
   )
@@ -73,7 +71,7 @@ export function handleBidItemListed(event: BidItemListedEvent): void {
   }
 
   let bidItemListed = new BidItemListed(
-    getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
+    getIdFromEventParams(event.block.timestamp, event.params.nftAddress)
   )
 
   bidItemListed.seller = event.params.seller
@@ -96,8 +94,10 @@ export function handleBidItemListed(event: BidItemListedEvent): void {
   activeItem.transactionHash = event.transaction.hash
 
   activeItem.buyer = Address.fromString("0x0000000000000000000000000000000000000000")
+  activeItem.highestBidder = Address.fromString("0x0000000000000000000000000000000000000000")
   activeItem.isBidding = true
-  activeItem.endTime = BigInt.fromString("0")
+  activeItem.startBuyTime = BigInt.fromString("0")
+  activeItem.endBuyTime = BigInt.fromString("0")
   activeItem.isFinishedBidding = false
 
   bidItemListed.save()
@@ -105,7 +105,6 @@ export function handleBidItemListed(event: BidItemListedEvent): void {
 }
 
 export function handleItemBought(event: ItemBoughtEvent): void {
-  
   let activeItem = ActiveItem.load(
     getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
   )
@@ -142,12 +141,13 @@ export function handleBidItemBought(event: BidItemBoughtEvent): void {
   bidItemBought.nftAddress = event.params.nftAddress
   bidItemBought.tokenId = event.params.tokenId
   bidItemBought.price = event.params.price
-
   bidItemBought.blockNumber = event.block.number
   bidItemBought.blockTimestamp = event.block.timestamp
   bidItemBought.transactionHash = event.transaction.hash
 
+
   activeItem!.isFinishedBidding = true
+  activeItem!.buyer = event.params.buyyer;
 
   bidItemBought.save()
   activeItem!.save()
@@ -187,13 +187,16 @@ export function handleRaiseBidPrice(event: RaiseBidPriceEvent): void {
   )
   
   raiseBidPrice.buyer = event.params.buyer
-  activeItem!.buyer = event.params.buyer
+  activeItem!.highestBidder = event.params.buyer
   
   raiseBidPrice.price = event.params.price
   activeItem!.price = event.params.price
 
-  raiseBidPrice.endTime = event.params.endTime
-  activeItem!.endTime = event.params.endTime
+  raiseBidPrice.startBuyTime = event.params.startBuyTime
+  activeItem!.startBuyTime = event.params.startBuyTime
+
+  raiseBidPrice.endBuyTime = event.params.endBuyTime
+  activeItem!.endBuyTime = event.params.endBuyTime
 
   raiseBidPrice.nftAddress = event.params.nftAddress
   raiseBidPrice.tokenId = event.params.tokenId

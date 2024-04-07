@@ -181,16 +181,20 @@ export class RaiseBidPrice__Params {
     return this._event.parameters[2].value.toBigInt();
   }
 
-  get price(): BigInt {
+  get startBuyTime(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
 
-  get endTime(): BigInt {
+  get endBuyTime(): BigInt {
     return this._event.parameters[4].value.toBigInt();
+  }
+
+  get price(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
   }
 }
 
-export class Contract__getBiddingResultValue0Struct extends ethereum.Tuple {
+export class nftmarketplace__getBiddingResultValue0Struct extends ethereum.Tuple {
   get seller(): Address {
     return this[0].toAddress();
   }
@@ -203,12 +207,16 @@ export class Contract__getBiddingResultValue0Struct extends ethereum.Tuple {
     return this[2].toBigInt();
   }
 
-  get endTime(): BigInt {
+  get startBuyTime(): BigInt {
     return this[3].toBigInt();
+  }
+
+  get endBuyTime(): BigInt {
+    return this[4].toBigInt();
   }
 }
 
-export class Contract__getListingResultValue0Struct extends ethereum.Tuple {
+export class nftmarketplace__getListingResultValue0Struct extends ethereum.Tuple {
   get price(): BigInt {
     return this[0].toBigInt();
   }
@@ -218,25 +226,25 @@ export class Contract__getListingResultValue0Struct extends ethereum.Tuple {
   }
 }
 
-export class Contract extends ethereum.SmartContract {
-  static bind(address: Address): Contract {
-    return new Contract("Contract", address);
+export class nftmarketplace extends ethereum.SmartContract {
+  static bind(address: Address): nftmarketplace {
+    return new nftmarketplace("nftmarketplace", address);
   }
 
   getBidding(
     nftAddress: Address,
     tokenId: BigInt,
-  ): Contract__getBiddingResultValue0Struct {
+  ): nftmarketplace__getBiddingResultValue0Struct {
     let result = super.call(
       "getBidding",
-      "getBidding(address,uint256):((address,address,uint256,uint256))",
+      "getBidding(address,uint256):((address,address,uint256,uint256,uint256))",
       [
         ethereum.Value.fromAddress(nftAddress),
         ethereum.Value.fromUnsignedBigInt(tokenId),
       ],
     );
 
-    return changetype<Contract__getBiddingResultValue0Struct>(
+    return changetype<nftmarketplace__getBiddingResultValue0Struct>(
       result[0].toTuple(),
     );
   }
@@ -244,10 +252,10 @@ export class Contract extends ethereum.SmartContract {
   try_getBidding(
     nftAddress: Address,
     tokenId: BigInt,
-  ): ethereum.CallResult<Contract__getBiddingResultValue0Struct> {
+  ): ethereum.CallResult<nftmarketplace__getBiddingResultValue0Struct> {
     let result = super.tryCall(
       "getBidding",
-      "getBidding(address,uint256):((address,address,uint256,uint256))",
+      "getBidding(address,uint256):((address,address,uint256,uint256,uint256))",
       [
         ethereum.Value.fromAddress(nftAddress),
         ethereum.Value.fromUnsignedBigInt(tokenId),
@@ -258,14 +266,16 @@ export class Contract extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      changetype<Contract__getBiddingResultValue0Struct>(value[0].toTuple()),
+      changetype<nftmarketplace__getBiddingResultValue0Struct>(
+        value[0].toTuple(),
+      ),
     );
   }
 
   getListing(
     nftAddress: Address,
     tokenId: BigInt,
-  ): Contract__getListingResultValue0Struct {
+  ): nftmarketplace__getListingResultValue0Struct {
     let result = super.call(
       "getListing",
       "getListing(address,uint256):((uint256,address))",
@@ -275,7 +285,7 @@ export class Contract extends ethereum.SmartContract {
       ],
     );
 
-    return changetype<Contract__getListingResultValue0Struct>(
+    return changetype<nftmarketplace__getListingResultValue0Struct>(
       result[0].toTuple(),
     );
   }
@@ -283,7 +293,7 @@ export class Contract extends ethereum.SmartContract {
   try_getListing(
     nftAddress: Address,
     tokenId: BigInt,
-  ): ethereum.CallResult<Contract__getListingResultValue0Struct> {
+  ): ethereum.CallResult<nftmarketplace__getListingResultValue0Struct> {
     let result = super.tryCall(
       "getListing",
       "getListing(address,uint256):((uint256,address))",
@@ -297,7 +307,9 @@ export class Contract extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      changetype<Contract__getListingResultValue0Struct>(value[0].toTuple()),
+      changetype<nftmarketplace__getListingResultValue0Struct>(
+        value[0].toTuple(),
+      ),
     );
   }
 

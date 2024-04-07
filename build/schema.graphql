@@ -1,19 +1,21 @@
 type ActiveItem @entity {
-    id: Bytes!
-    buyer: Bytes! # address
-    seller: Bytes! # address
-    nftAddress: Bytes! # address
-    tokenId: BigInt!
-    price: BigInt
-    blockNumber: BigInt!
-    blockTimestamp: BigInt!
-    transactionHash: Bytes!
-    isBidding: Boolean!
-    endTime: BigInt
-    isFinishedBidding: Boolean
+  id: Bytes!
+  buyer: Bytes! # address
+  seller: Bytes! # address
+  highestBidder: Bytes # address
+  nftAddress: Bytes! # address
+  tokenId: BigInt!
+  price: BigInt
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  isBidding: Boolean!
+  startBuyTime: BigInt
+  endBuyTime: BigInt
+  isFinishedBidding: Boolean
 }
 
-type BidItemBought @entity {
+type BidItemBought @entity(immutable: true) {
   id: Bytes!
   buyyer: Bytes! # address
   nftAddress: Bytes! # address
@@ -24,7 +26,7 @@ type BidItemBought @entity {
   transactionHash: Bytes!
 }
 
-type BidItemListed @entity {
+type BidItemListed @entity(immutable: true) {
   id: Bytes!
   seller: Bytes! # address
   nftAddress: Bytes! # address
@@ -35,7 +37,7 @@ type BidItemListed @entity {
   transactionHash: Bytes!
 }
 
-type ItemBought @entity {
+type ItemBought @entity(immutable: true) {
   id: Bytes!
   buyer: Bytes! # address
   nftAddress: Bytes! # address
@@ -46,7 +48,7 @@ type ItemBought @entity {
   transactionHash: Bytes!
 }
 
-type ItemCanceled @entity {
+type ItemCanceled @entity(immutable: true) {
   id: Bytes!
   seller: Bytes! # address
   nftAddress: Bytes! # address
@@ -56,7 +58,7 @@ type ItemCanceled @entity {
   transactionHash: Bytes!
 }
 
-type ItemListed @entity {
+type ItemListed @entity(immutable: true) {
   id: Bytes!
   seller: Bytes! # address
   nftAddress: Bytes! # address
@@ -67,13 +69,14 @@ type ItemListed @entity {
   transactionHash: Bytes!
 }
 
-type RaiseBidPrice @entity {
+type RaiseBidPrice @entity(immutable: true) {
   id: Bytes!
   buyer: Bytes! # address
   nftAddress: Bytes! # address
   tokenId: BigInt! # uint256
+  startBuyTime: BigInt! # uint256
+  endBuyTime: BigInt! # uint256
   price: BigInt! # uint256
-  endTime: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

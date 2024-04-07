@@ -8,9 +8,9 @@ import {
 } from "matchstick-as/assembly/index"
 import { Address, BigInt } from "@graphprotocol/graph-ts"
 import { BidItemBought } from "../generated/schema"
-import { BidItemBought as BidItemBoughtEvent } from "../generated/Contract/Contract"
-import { handleBidItemBought } from "../src/contract"
-import { createBidItemBoughtEvent } from "./contract-utils"
+import { BidItemBought as BidItemBoughtEvent } from "../generated/nftmarketplace/nftmarketplace"
+import { handleBidItemBought } from "../src/nftmarketplace"
+import { createBidItemBoughtEvent } from "./nftmarketplace-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0

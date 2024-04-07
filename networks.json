@@ -1,8 +1,8 @@
 {
-  "sepolia": {
-    "Contract": {
-      "address": "0x78a10Ad00434Ce44e0ACAC9293A258EEdDdcAA51",
-      "startBlock": 5442098
+  "arbitrum-sepolia": {
+    "nftmarketplace": {
+      "address": "0xCf6eD3Ac93aFE951ddADec505C74f9bcA62C2912",
+      "startBlock": 31190757
     }
   }
 }

@@ -7,7 +7,7 @@ import {
   ItemCanceled,
   ItemListed,
   RaiseBidPrice
-} from "../generated/Contract/Contract"
+} from "../generated/nftmarketplace/nftmarketplace"
 
 export function createBidItemBoughtEvent(
   buyyer: Address,
@@ -169,8 +169,9 @@ export function createRaiseBidPriceEvent(
   buyer: Address,
   nftAddress: Address,
   tokenId: BigInt,
-  price: BigInt,
-  endTime: BigInt
+  startBuyTime: BigInt,
+  endBuyTime: BigInt,
+  price: BigInt
 ): RaiseBidPrice {
   let raiseBidPriceEvent = changetype<RaiseBidPrice>(newMockEvent())
 
@@ -192,13 +193,19 @@ export function createRaiseBidPriceEvent(
     )
   )
   raiseBidPriceEvent.parameters.push(
-    new ethereum.EventParam("price", ethereum.Value.fromUnsignedBigInt(price))
+    new ethereum.EventParam(
+      "startBuyTime",
+      ethereum.Value.fromUnsignedBigInt(startBuyTime)
+    )
   )
   raiseBidPriceEvent.parameters.push(
     new ethereum.EventParam(
-      "endTime",
-      ethereum.Value.fromUnsignedBigInt(endTime)
+      "endBuyTime",
+      ethereum.Value.fromUnsignedBigInt(endBuyTime)
     )
+  )
+  raiseBidPriceEvent.parameters.push(
+    new ethereum.EventParam("price", ethereum.Value.fromUnsignedBigInt(price))
   )
 
   return raiseBidPriceEvent

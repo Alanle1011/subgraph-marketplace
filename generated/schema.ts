@@ -80,6 +80,23 @@ export class ActiveItem extends Entity {
     this.set("seller", Value.fromBytes(value));
   }
 
+  get highestBidder(): Bytes | null {
+    let value = this.get("highestBidder");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set highestBidder(value: Bytes | null) {
+    if (!value) {
+      this.unset("highestBidder");
+    } else {
+      this.set("highestBidder", Value.fromBytes(<Bytes>value));
+    }
+  }
+
   get nftAddress(): Bytes {
     let value = this.get("nftAddress");
     if (!value || value.kind == ValueKind.NULL) {
@@ -175,8 +192,8 @@ export class ActiveItem extends Entity {
     this.set("isBidding", Value.fromBoolean(value));
   }
 
-  get endTime(): BigInt | null {
-    let value = this.get("endTime");
+  get startBuyTime(): BigInt | null {
+    let value = this.get("startBuyTime");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -184,11 +201,28 @@ export class ActiveItem extends Entity {
     }
   }
 
-  set endTime(value: BigInt | null) {
+  set startBuyTime(value: BigInt | null) {
     if (!value) {
-      this.unset("endTime");
+      this.unset("startBuyTime");
     } else {
-      this.set("endTime", Value.fromBigInt(<BigInt>value));
+      this.set("startBuyTime", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get endBuyTime(): BigInt | null {
+    let value = this.get("endBuyTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set endBuyTime(value: BigInt | null) {
+    if (!value) {
+      this.unset("endBuyTime");
+    } else {
+      this.set("endBuyTime", Value.fromBigInt(<BigInt>value));
     }
   }
 
@@ -950,6 +984,32 @@ export class RaiseBidPrice extends Entity {
     this.set("tokenId", Value.fromBigInt(value));
   }
 
+  get startBuyTime(): BigInt {
+    let value = this.get("startBuyTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set startBuyTime(value: BigInt) {
+    this.set("startBuyTime", Value.fromBigInt(value));
+  }
+
+  get endBuyTime(): BigInt {
+    let value = this.get("endBuyTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set endBuyTime(value: BigInt) {
+    this.set("endBuyTime", Value.fromBigInt(value));
+  }
+
   get price(): BigInt {
     let value = this.get("price");
     if (!value || value.kind == ValueKind.NULL) {
@@ -961,19 +1021,6 @@ export class RaiseBidPrice extends Entity {
 
   set price(value: BigInt) {
     this.set("price", Value.fromBigInt(value));
-  }
-
-  get endTime(): BigInt {
-    let value = this.get("endTime");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set endTime(value: BigInt) {
-    this.set("endTime", Value.fromBigInt(value));
   }
 
   get blockNumber(): BigInt {

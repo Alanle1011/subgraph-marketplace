@@ -15,11 +15,7 @@
     "type": "error"
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "nftAddress", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "price", "type": "uint256" }
-    ],
+    "inputs": [],
     "name": "NftMarketPlace__BiddingTimeIsOver",
     "type": "error"
   },
@@ -27,7 +23,8 @@
     "inputs": [
       { "internalType": "address", "name": "nftAddress", "type": "address" },
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "endTime", "type": "uint256" }
+      { "internalType": "uint256", "name": "startBuyTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "endBuyTime", "type": "uint256" }
     ],
     "name": "NftMarketPlace__BuyBiddingTimeIsNotMeet",
     "type": "error"
@@ -246,13 +243,19 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "price",
+        "name": "startBuyTime",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "endTime",
+        "name": "endBuyTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
         "type": "uint256"
       }
     ],
@@ -311,7 +314,12 @@
           { "internalType": "address", "name": "seller", "type": "address" },
           { "internalType": "address", "name": "buyer", "type": "address" },
           { "internalType": "uint256", "name": "price", "type": "uint256" },
-          { "internalType": "uint256", "name": "endTime", "type": "uint256" }
+          {
+            "internalType": "uint256",
+            "name": "startBuyTime",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "endBuyTime", "type": "uint256" }
         ],
         "internalType": "struct NftMarketPlace.Bidding",
         "name": "",
